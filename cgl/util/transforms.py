@@ -1,7 +1,7 @@
-from math import pi, cos, sin, radians, degrees, sqrt
+from math import pi, cos, sin, radians, degrees, sqrt, tan, atan, atan2, asin
 import bisect
 
-__all__ = [ 'transform_sinusoidal', 'transform_equirectangular', 'transform_mollweide', 'transform_robinson']
+__all__ = [ 'transform_sinusoidal', 'transform_cassini', 'transform_equirectangular', 'transform_mollweide', 'transform_robinson']
 
 def transform_sinusoidal(lon, lat, lon0=0):
     """
@@ -21,6 +21,17 @@ def transform_sinusoidal(lon, lat, lon0=0):
     y = lat
     return x, y
 
+def transform_cassini(lon, lat, lat0=0):
+    '''Cassini projection'''
+    # lon: lambda, lat: phi
+    lon = radians(lon)
+    lat = radians(lat)
+    lat0 = radians(lat0)
+    x = asin(sin(lon) * cos(lat-lat0))
+    # y = atan(tan(lat-lat0) / cos(lon))
+    y = atan2(sin(lat), cos(lon)*cos(lat-lat0))
+    return x, y
+
 def transform_equirectangular(lon, lat, lat0=0):
     """
     Returns the transformation of lon and lat on the equirectangular projection,
@@ -36,7 +47,6 @@ def transform_equirectangular(lon, lat, lat0=0):
     Output
       x: x coordinate (origin at 0,0)
       y: y coordinate (origin at 0,0)
-
     """
     x = lon * cos(radians(lat0))
     y = lat
