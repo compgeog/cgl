@@ -23,7 +23,6 @@ def transform_sinusoidal(lon, lat, lon0=0):
 
 def transform_cassini(lon, lat, lon0=0):
     '''Cassini projection'''
-    # lon: lambda, lat: phi
     lon = radians(lon)
     lat = radians(lat)
     lon0 = radians(lon0)
