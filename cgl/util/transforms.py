@@ -21,15 +21,14 @@ def transform_sinusoidal(lon, lat, lon0=0):
     y = lat
     return x, y
 
-def transform_cassini(lon, lat, lat0=0):
+def transform_cassini(lon, lat, lon0=0):
     '''Cassini projection'''
     # lon: lambda, lat: phi
     lon = radians(lon)
     lat = radians(lat)
-    lat0 = radians(lat0)
-    x = asin(sin(lon) * cos(lat-lat0))
-    # y = atan(tan(lat-lat0) / cos(lon))
-    y = atan2(sin(lat), cos(lon)*cos(lat-lat0))
+    lon0 = radians(lon0)
+    x = asin(sin(lon-lon0) * cos(lat))
+    y = atan2(sin(lat), cos(lon-lon0)*cos(lat))
     return x, y
 
 def transform_equirectangular(lon, lat, lat0=0):
