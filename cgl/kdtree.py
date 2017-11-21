@@ -159,20 +159,17 @@ def range_query_orthogonal(t, rect, found, depth=0):
         return
     k = len(t.point)
     axis = depth%k
-    if t.point[axis] < rect[axis][0]:
-        range_query_orthogonal(t.right, rect, found, depth+1)
-        return
-    if t.point[axis] > rect[axis][1]:
-        range_query_orthogonal(t.left, rect, found, depth+1)
-        return
     x, y = t.point.x, t.point.y
     if not (rect[0][0]>x or rect[0][1]<x or
             rect[1][0]>y or rect[1][1]<y):
         found.append(t.point)
-    range_query_orthogonal(t.left, rect, found, depth+1)
-    range_query_orthogonal(t.right, rect, found, depth+1)
-    return
-
+    if t.point[axis] < rect[axis][0]:
+        range_query_orthogonal(t.right, rect, found, depth+1)
+    elif t.point[axis] > rect[axis][1]:
+        range_query_orthogonal(t.left, rect, found, depth+1)
+    else:
+        range_query_orthogonal(t.left, rect, found, depth+1)
+        range_query_orthogonal(t.right, rect, found, depth+1)
 
 def range_query_circular(t, p, r, found, depth=0):
     """
