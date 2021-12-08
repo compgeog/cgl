@@ -14,7 +14,7 @@ __author__ = "Ningchuan Xiao <ncxiao@gmail.com>"
 
 INF = float('inf')
 
-from cgl.point import Point
+from .point import Point
 
 __all__ = ['kdtree']
 
