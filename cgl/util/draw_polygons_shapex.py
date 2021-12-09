@@ -32,22 +32,21 @@ def draw_shape(shp, classes=None, colors=None, edgecolor='grey', alpha=None, axi
 # classes: integer class assignment for each feature
 # colors: a list of colors for each class
 # def draw_layer(layer, classes=None, colors=None, edgecolor='grey', alpha=None, axis=None, linewidth=0.5):
-    for f in shp:
-        # geom = f.GetGeometryRef()          # geometry of feature
+    for i in range(len(shp)):
+    # for f in shp:
+        f = shp[i]
         geom = f['geometry']
         geomtype = geom['type']
         facecolor = 'lightgrey'
         if classes != None and colors != None:
-            id = f['id']
-            facecolor = colors[classes[id]]
+            facecolor = colors[classes[i]]
         if geomtype == "MultiPolygon":
-            print('multi')
             for geom1 in geom['coordinates']:
                 plot_rings(geom1, facecolor=facecolor, edgecolor=edgecolor, alpha=alpha, axis=axis, linewidth=linewidth)
         elif geomtype == "Polygon":
             plot_rings(geom['coordinates'], facecolor=facecolor, edgecolor=edgecolor, alpha=alpha, axis=axis, linewidth=linewidth)
         elif geomtype == "LineString":       # none polygon types
-            print('LINESTRING!')
+            print('LineString!')
 
 def rect_legend(x, y, w, h, xgap, axis, colors, ygap=0.1, edgecolor=None, intervals=None, order='descending', use_integers=True):
     k = len(colors)

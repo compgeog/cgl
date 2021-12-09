@@ -66,11 +66,11 @@ def geom_share(g1, g2, n0):
 
 def get_feature_envelopes(shp):
     # shp: shapex object
-    # get the envelope of each feature
+    # get the envelope of each feature: [xmin, ymin, xmax, ymax]
     envelopes = []
     for f in shp:
         if f['geometry']['type'] == 'Polygon':
-            coords = f['geometry']['coordinates'][0]
+            coords = f['geometry']['coordinates'][0] # exterior only
             xs = [p[0] for p in coords]
             xmin = min(xs)
             xmax = max(xs)
@@ -79,16 +79,17 @@ def get_feature_envelopes(shp):
             ymax = max(ys)
             envelopes.append([xmin, ymin, xmax, ymax])
         elif f['geometry']['type'] == 'MultiPolygon':
-            rings = f['geometry']['coordinates']
-            p = rings[0][0][0] # get point will do
+            parts = f['geometry']['coordinates']
+            p = parts[0][0][0] # first point will do
             xmin,xmax, ymin, ymax = p[0], p[0], p[1], p[1]
-            for coords in rings:
+            for part in parts:
+                coords = part[0] # exterior only
                 xs = [p[0] for p in coords]
-                xmin1 = min(min(xs), xmin)
-                xmax1 = max(max(xs), xmax)
+                xmin = min(min(xs), xmin)
+                xmax = max(max(xs), xmax)
                 ys = [p[1] for p in coords]
-                ymin1 = min(min(ys), ymin)
-                ymax1 = max(max(ys), ymax)
+                ymin = min(min(ys), ymin)
+                ymax = max(max(ys), ymax)
             envelopes.append([xmin, ymin, xmax, ymax])
     return envelopes
 
