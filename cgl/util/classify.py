@@ -89,10 +89,18 @@ class Intervals:
         self.init = 1
 
     def get_class(self, val):
+        # return the class of val
         i = bisect_right(self.lowers, val)            # leftmost lower bound that is greater than val
         if i>0:
             i = i-1
         return i
+
+    def get_bounds(self):
+        # return all the bounds in a list of [ [min, max], [min, max], ...]
+        bounds = []
+        for i in self.intervals:
+            bounds.append([i.min, i.max])
+        return bounds
 
     def __repr__(self):
         return ", ".join(["[{0}]".format(i) for i in self.intervals])
