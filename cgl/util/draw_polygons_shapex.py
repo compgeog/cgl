@@ -48,7 +48,7 @@ def draw_shape(shp, classes=None, colors=None, edgecolor='grey', alpha=None, axi
         elif geomtype == "LineString":       # none polygon types
             print('LineString!')
 
-def rect_legend(x, y, w, h, xgap, axis, colors, ygap=0.1, edgecolor=None, intervals=None, order='descending', use_integers=True):
+def rect_legend(x, y, w, h, xgap, axis, colors, ygap=0.1, edgecolor=None, intervals=None, order='descending', use_integers=True, num_digits=0):
     k = len(colors)
     for i in range(k):
         if order=='descending':
@@ -59,13 +59,12 @@ def rect_legend(x, y, w, h, xgap, axis, colors, ygap=0.1, edgecolor=None, interv
         rect1 = matplotlib.patches.Rectangle((x, y+h*i), w, h, facecolor=c, edgecolor=edgecolor)
         axis.add_patch(rect1)
         label = ''
+        _num_digits = num_digits         # num_digits must be an integer
+        if use_integers:                 # legacy parameter
+            _num_digits = 0 
         if intervals is not None:
-            if use_integers:
-                label = '{0:.0f} - {1:.0f}'.format(intervals.intervals[ii].min, intervals.intervals[ii].max)
-            else:
-                label = '{0:.1f} - {1:.1f}'.format(intervals.intervals[ii].min, intervals.intervals[ii].max)
+            label = '{0:.{digits}f} - {1:.{digits}f}'.format(intervals.intervals[ii].min, intervals.intervals[ii].max, digits=_num_digits)
         axis.text(x+w+xgap, y+h*i+ygap, label)
-
 
 def make_label(objs, digit):
     label = '['
