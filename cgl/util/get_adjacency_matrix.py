@@ -1,11 +1,21 @@
-"""
+'''
 Adjacency matrix using shapex
 
-Contact:
+Updates
+
+    June 4, 2023
+        In memory of LIU SI (June 4)
+        
+        Simplified geom_share
+        Corrected parameter names (shp changed to features)
+        Removed option of output (use only lists now)
+
+Contact
+
 Ningchuan Xiao
 The Ohio State University
 Columbus, OH
-"""
+'''
 
 __author__ = "Ningchuan Xiao <ncxiao@gmail.com>"
 
@@ -36,7 +46,6 @@ def flatten_points(geom):
         for ring in rings:
             pts.extend(ring)
     return pts
-            
 
 def geom_share(g1, g2, n0):
     """
@@ -56,19 +65,17 @@ def geom_share(g1, g2, n0):
     pts2 = flatten_points(g2)
     np = 0
     for p1 in pts1:
-        for p2 in pts2:
-            if p1==p2:
-                np+=1
-            if np>=n0:
-                return True
+        if p1 in pts2:
+            np += 1
+        if np >= n0:
+            return True
     return False
 
-
-def get_feature_envelopes(shp):
+def get_feature_envelopes(features):
     # shp: shapex object
     # get the envelope of each feature: [xmin, ymin, xmax, ymax]
     envelopes = []
-    for f in shp:
+    for f in features:
         if f['geometry']['type'] == 'Polygon':
             coords = f['geometry']['coordinates'][0] # exterior only
             xs = [p[0] for p in coords]
@@ -94,37 +101,28 @@ def get_feature_envelopes(shp):
     return envelopes
 
 
-def adjacency_matrix(shp, output="L", num_shared_points=1):
+def adjacency_matrix(features, num_shared_points=2):
     """
     Creates adjacent matrix based on a polygon shapefile
 
     Input
       shp: shapex object
-      output: output format, M - matrix, L - list
       num_shared_points: number of shared points required for adjacency
 
     Output
       The adjacency between polygons in matrix or list form
     """
-    n = len(shp)
-
-    if output=="M":
-        # adj = np.array([[0]*n for x in range(n)])
-        print('This version does not support returning a numpy array')
-        return NotImplemented
-    elif output=="L":
-        adj = []
-    else:
-        return None
+    n = len(features)
+    adj = []
     
-    envelopes = get_feature_envelopes(shp)
+    envelopes = get_feature_envelopes(features)
     
     for i in range(n):
-        feature1 = shp[i]
+        feature1 = features[i]
         geom1 = feature1['geometry']
         env1 = envelopes[i]
         for j in range(i):
-            feature2 = shp[j]
+            feature2 = features[j]
             geom2 = feature2['geometry']
             env2 = envelopes[j]
             if not env_touch(env1, env2):
@@ -133,11 +131,6 @@ def adjacency_matrix(shp, output="L", num_shared_points=1):
             if geom_share(geom1, geom2, num_shared_points):
                 is_adj = True
             if is_adj:
-                if output=="M":
-                    adj[i][j] = adj[j][i] = 1
-                elif output=="L":
-                    adj.append([i, j])
-                else: # undefined
-                    pass
+                adj.append([i, j])
     return adj
 
