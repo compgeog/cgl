@@ -26,27 +26,43 @@ def plot_rings(geom, facecolor='lightgrey', edgecolor='grey', linewidth=0.5,
         plt.gca().add_patch(l)
     else:
         axis.add_patch(l)
-        
-def draw_shape(shp, classes=None, colors=None, edgecolor='grey', alpha=None, axis=None, linewidth=0.5):
-# shp: a shapex object
+
+def plot_polygon(f, classes=None, colors=None, edgecolor='grey', alpha=None, axis=None, linewidth=0.5):
+    # f: a feature (polygon only at this point)
+    geom = f['geometry']
+    geomtype = geom['type']
+    facecolor = 'lightgrey'
+    if classes != None and colors != None:
+        facecolor = colors[classes[i]]
+    if geomtype == "MultiPolygon":
+        for geom1 in geom['coordinates']:
+            plot_rings(geom1, facecolor=facecolor, edgecolor=edgecolor, alpha=alpha, axis=axis, linewidth=linewidth)
+    elif geomtype == "Polygon":
+        plot_rings(geom['coordinates'], facecolor=facecolor, edgecolor=edgecolor, alpha=alpha, axis=axis, linewidth=linewidth)
+    elif geomtype == "LineString":       # none polygon types
+        print('LineString!')
+
+def draw_shape(features, classes=None, colors=None, edgecolor='grey', alpha=None, axis=None, linewidth=0.5):
+# features: a collection of features
 # classes: integer class assignment for each feature
 # colors: a list of colors for each class
 # def draw_layer(layer, classes=None, colors=None, edgecolor='grey', alpha=None, axis=None, linewidth=0.5):
-    for i in range(len(shp)):
-    # for f in shp:
-        f = shp[i]
-        geom = f['geometry']
-        geomtype = geom['type']
-        facecolor = 'lightgrey'
-        if classes != None and colors != None:
-            facecolor = colors[classes[i]]
-        if geomtype == "MultiPolygon":
-            for geom1 in geom['coordinates']:
-                plot_rings(geom1, facecolor=facecolor, edgecolor=edgecolor, alpha=alpha, axis=axis, linewidth=linewidth)
-        elif geomtype == "Polygon":
-            plot_rings(geom['coordinates'], facecolor=facecolor, edgecolor=edgecolor, alpha=alpha, axis=axis, linewidth=linewidth)
-        elif geomtype == "LineString":       # none polygon types
-            print('LineString!')
+    for i in range(len(features)):
+    # for f in features:
+        f = features[i]
+        plot_polygon(f, classes, colors, edgecolor, alpha, axis, linewidth)
+        # geom = f['geometry']
+        # geomtype = geom['type']
+        # facecolor = 'lightgrey'
+        # if classes != None and colors != None:
+        #     facecolor = colors[classes[i]]
+        # if geomtype == "MultiPolygon":
+        #     for geom1 in geom['coordinates']:
+        #         plot_rings(geom1, facecolor=facecolor, edgecolor=edgecolor, alpha=alpha, axis=axis, linewidth=linewidth)
+        # elif geomtype == "Polygon":
+        #     plot_rings(geom['coordinates'], facecolor=facecolor, edgecolor=edgecolor, alpha=alpha, axis=axis, linewidth=linewidth)
+        # elif geomtype == "LineString":       # none polygon types
+        #     print('LineString!')
 
 def rect_legend(x, y, w, h, xgap, axis, colors, ygap=0.1, edgecolor=None, intervals=None, order='descending', num_digits=0):
     # note: the parameter called use_integers is no longer used, replaced by num_digits
@@ -74,16 +90,16 @@ def make_label(objs, digit):
 def mark_make_label(x, y, ax, objs, digit=4):
     ax.text(x, y, make_label(objs, digit))
 
-if __name__ == '__main__':
-    if len(sys.argv) == 2:
-        fname = sys.argv[1]                # file name input
-        drvName = "ESRI Shapefile"
-        driver = ogr.GetDriverByName(drvName)  # a shapefile driver
-        driver = ogr.GetDriverByName("ESRI Shapefile")
-        vector = driver.Open(fname, 0)         # open input file
-        layer = vector.GetLayer(0)             # shapefiles use 0
-        draw_layer(layer)
-        plt.axis('scaled')
-        plt.show()
-    else:
-        print("Usage:", sys.argv[0], "FILE.shp")
+# if __name__ == '__main__':
+#     if len(sys.argv) == 2:
+#         fname = sys.argv[1]                # file name input
+#         drvName = "ESRI Shapefile"
+#         driver = ogr.GetDriverByName(drvName)  # a shapefile driver
+#         driver = ogr.GetDriverByName("ESRI Shapefile")
+#         vector = driver.Open(fname, 0)         # open input file
+#         layer = vector.GetLayer(0)             # shapefiles use 0
+#         draw_layer(layer)
+#         plt.axis('scaled')
+#         plt.show()
+#     else:
+#         print("Usage:", sys.argv[0], "FILE.shp")
