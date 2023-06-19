@@ -23,9 +23,9 @@ def plot_rings(geom, facecolor='lightgrey', edgecolor='grey', linewidth=0.5,
     l = plt.Polygon(poly, closed=True, fill=fill,
                     facecolor=facecolor, lw=linewidth, edgecolor=edgecolor, alpha=alpha)
     if axis is None:
-        plt.gca().add_line(l)
+        plt.gca().add_patch(l)
     else:
-        axis.add_line(l)
+        axis.add_patch(l)
         
 def draw_shape(shp, classes=None, colors=None, edgecolor='grey', alpha=None, axis=None, linewidth=0.5):
 # shp: a shapex object
