@@ -27,13 +27,12 @@ def plot_rings(geom, facecolor='lightgrey', edgecolor='grey', linewidth=0.5,
     else:
         axis.add_patch(l)
 
-def plot_polygon(f, classes=None, colors=None, edgecolor='grey', alpha=None, axis=None, linewidth=0.5):
+def plot_polygon(f, facecolor=None, edgecolor='grey', alpha=None, axis=None, linewidth=0.5):
     # f: a feature (polygon only at this point)
     geom = f['geometry']
     geomtype = geom['type']
-    facecolor = 'lightgrey'
-    if classes != None and colors != None:
-        facecolor = colors[classes[i]]
+    if not facecolor:
+        facecolor = 'lightgrey'
     if geomtype == "MultiPolygon":
         for geom1 in geom['coordinates']:
             plot_rings(geom1, facecolor=facecolor, edgecolor=edgecolor, alpha=alpha, axis=axis, linewidth=linewidth)
@@ -50,12 +49,12 @@ def draw_shape(features, classes=None, colors=None, edgecolor='grey', alpha=None
     for i in range(len(features)):
     # for f in features:
         f = features[i]
-        plot_polygon(f, classes, colors, edgecolor, alpha, axis, linewidth)
+        facecolor = 'lightgrey'
+        if classes != None and colors != None:
+            facecolor = colors[classes[i]]
+        plot_polygon(f, facecolor, edgecolor, alpha, axis, linewidth)
         # geom = f['geometry']
         # geomtype = geom['type']
-        # facecolor = 'lightgrey'
-        # if classes != None and colors != None:
-        #     facecolor = colors[classes[i]]
         # if geomtype == "MultiPolygon":
         #     for geom1 in geom['coordinates']:
         #         plot_rings(geom1, facecolor=facecolor, edgecolor=edgecolor, alpha=alpha, axis=axis, linewidth=linewidth)
@@ -63,6 +62,7 @@ def draw_shape(features, classes=None, colors=None, edgecolor='grey', alpha=None
         #     plot_rings(geom['coordinates'], facecolor=facecolor, edgecolor=edgecolor, alpha=alpha, axis=axis, linewidth=linewidth)
         # elif geomtype == "LineString":       # none polygon types
         #     print('LineString!')
+
 
 def rect_legend(x, y, w, h, xgap, axis, colors, ygap=0.1, edgecolor=None, intervals=None, order='descending', num_digits=0):
     # note: the parameter called use_integers is no longer used, replaced by num_digits
