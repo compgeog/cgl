@@ -41,6 +41,16 @@ def plot_polygon(f, facecolor=None, edgecolor='grey', alpha=None, axis=None, lin
     elif geomtype == "LineString":       # none polygon types
         print('LineString!')
 
+# Draws multiple polygons for convenience
+def draw_polygons(fs, colors=None):
+    if not colors:
+        colors = ['lightgrey' for _ in fs]
+    for i in range(len(fs)):
+        print(fs[i]['properties'])
+        plot_polygon(fs[i], colors[i])
+    plt.axis('off')
+    plt.axis('equal')
+    
 def draw_shape(features, classes=None, colors=None, edgecolor='grey', alpha=None, axis=None, linewidth=0.5):
 # features: a collection of features
 # classes: integer class assignment for each feature
