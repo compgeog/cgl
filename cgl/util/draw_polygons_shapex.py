@@ -42,7 +42,7 @@ def plot_polygon(f, facecolor=None, edgecolor='grey', alpha=None, axis=None, lin
         print('LineString!')
 
 # Draws multiple polygons for convenience
-def draw_polygons(fs, colors=None):
+def draw_polygons(fs, colors=None, show=False):
     if not colors:
         colors = ['lightgrey' for _ in fs]
     for i in range(len(fs)):
@@ -50,6 +50,8 @@ def draw_polygons(fs, colors=None):
         plot_polygon(fs[i], colors[i])
     plt.axis('off')
     plt.axis('equal')
+    if show:
+        plt.show()
     
 def draw_shape(features, classes=None, colors=None, edgecolor='grey', alpha=None, axis=None, linewidth=0.5):
 # features: a collection of features
