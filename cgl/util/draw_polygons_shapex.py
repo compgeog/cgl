@@ -42,11 +42,12 @@ def plot_polygon(f, facecolor=None, edgecolor='grey', alpha=None, axis=None, lin
         print('LineString!')
 
 # Draws multiple polygons for convenience
-def draw_polygons(fs, colors=None, show=False):
+def draw_polygons(fs, colors=None, info=False, show=False):
     if not colors:
         colors = ['lightgrey' for _ in fs]
     for i in range(len(fs)):
-        print(fs[i]['properties'])
+        if info:
+            print(fs[i]['properties'])
         plot_polygon(fs[i], colors[i])
     plt.axis('off')
     plt.axis('equal')
