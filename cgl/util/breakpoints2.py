@@ -1,7 +1,11 @@
 """
-Break point interator
+Break point iterator
 
 This is version 2.0. The older version (breakpoints.py) should not be used anymore.
+
+September 22, 2023
+
+    Add get_intervals
 
 """
 
@@ -86,10 +90,10 @@ class Breakpoints:
     >>> from breakpoints import *
     >>> help(Breakpoints)
     >>> myint = Breakpoints(2, 5)
-    >>> print myint.true_total
+    >>> print(myint.true_total)
     10
     >>> while myint.next() is not None:
-    ...     print myint
+    ...     print(myint)
     ... 
     0,1
     0,2
@@ -115,8 +119,8 @@ class Breakpoints:
     ...     intvs = [-1] + [c.pos for c in myint.current] + [len(newdata)-1]
     ...     for i in range(len(intvs)-1):
     ...         slice = newdata[intvs[i]+1:intvs[i+1]+1]
-    ...         print slice,
-    ...     print
+    ...         print(slice, end=' ')
+    ...     print()
     ... 
     [33] [69] [78, 15, 57, 93]
     [33] [69, 78] [15, 57, 93]
@@ -184,6 +188,10 @@ class Breakpoints:
         self.pointer += 1
         return 1
 
+    def get_intervals(self):
+        '''Returns a list of the break points in the current iteration'''
+        return [c.pos for c in self.current]
+    
     def __repr__(self):
         #return "\n".join([str(c) for c in self.current])
         return ",".join([str(c.pos) for c in self.current])
